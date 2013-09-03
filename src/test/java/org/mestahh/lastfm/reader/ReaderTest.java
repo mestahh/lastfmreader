@@ -3,6 +3,7 @@ package org.mestahh.lastfm.reader;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Before;
@@ -30,7 +31,7 @@ public class ReaderTest {
 	}
 
 	@Test
-	public void retrieves_the_bio_via_the_last_fm_api() {
+	public void retrieves_the_bio_via_the_last_fm_api() throws IOException {
 		prepareExpectations("getInfo");
 		String bio = reader.getBio("Metallica");
 
@@ -39,7 +40,7 @@ public class ReaderTest {
 	}
 
 	@Test
-	public void retrieves_the_similar_artists_from_the_last_fm_api() {
+	public void retrieves_the_similar_artists_from_the_last_fm_api() throws IOException {
 		prepareExpectations("getSimilar");
 		List<String> similarArtists = reader.getSimilarArtists("Metallica");
 
@@ -47,9 +48,8 @@ public class ReaderTest {
 		verify(mapper).retrieveSimilarArtists(answer);
 	}
 
-	private void prepareExpectations(String method) {
-		request = "http://ws.audioscrobbler.com/2.0/?method=artist." + method + "&api_key=" + apiKey
-				+ "&artist=Metallica";
+	private void prepareExpectations(String method) throws IOException {
+		request = "method=artist." + method + "&api_key=" + apiKey + "&artist=Metallica";
 
 		when(restReader.getApiKey()).thenReturn(apiKey);
 		when(restReader.getAnswer(request)).thenReturn(answer);

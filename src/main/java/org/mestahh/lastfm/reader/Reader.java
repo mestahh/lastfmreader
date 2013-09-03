@@ -1,5 +1,6 @@
 package org.mestahh.lastfm.reader;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Reader {
@@ -12,15 +13,15 @@ public class Reader {
 		this.mapper = mapper;
 	}
 
-	public String getBio(String artist) {
-		String answer = restReader.getAnswer("http://ws.audioscrobbler.com/2.0/?method=artist.getInfo&api_key="
-				+ restReader.getApiKey() + "&artist=" + artist);
+	public String getBio(String artist) throws IOException {
+		String answer = restReader.getAnswer("method=artist.getInfo&api_key=" + restReader.getApiKey() + "&artist="
+				+ artist);
 		return mapper.retrieveBio(answer);
 	}
 
-	public List<String> getSimilarArtists(String artist) {
-		String answer = restReader.getAnswer("http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&api_key="
-				+ restReader.getApiKey() + "&artist=" + artist);
+	public List<String> getSimilarArtists(String artist) throws IOException {
+		String answer = restReader.getAnswer("method=artist.getSimilar&api_key=" + restReader.getApiKey() + "&artist="
+				+ artist);
 		return mapper.retrieveSimilarArtists(answer);
 
 	}
