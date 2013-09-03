@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.util.List;
 
+import org.jdom.JDOMException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +41,7 @@ public class ReaderTest {
 	}
 
 	@Test
-	public void retrieves_the_similar_artists_from_the_last_fm_api() throws IOException {
+	public void retrieves_the_similar_artists_from_the_last_fm_api() throws IOException, JDOMException {
 		prepareExpectations("getsimilar");
 		List<String> similarArtists = reader.getSimilarArtists("Metallica");
 

@@ -3,6 +3,8 @@ package org.mestahh.lastfm.reader;
 import java.io.IOException;
 import java.util.List;
 
+import org.jdom.JDOMException;
+
 public class Reader {
 
 	private final RestReader restReader;
@@ -19,7 +21,7 @@ public class Reader {
 		return mapper.retrieveBio(answer);
 	}
 
-	public List<String> getSimilarArtists(String artist) throws IOException {
+	public List<String> getSimilarArtists(String artist) throws IOException, JDOMException {
 		String answer = restReader.getAnswer("method=artist.getsimilar&api_key=" + restReader.getApiKey() + "&artist="
 				+ artist);
 		return mapper.retrieveSimilarArtists(answer);
