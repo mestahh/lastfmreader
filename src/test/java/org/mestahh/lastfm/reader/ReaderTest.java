@@ -32,7 +32,7 @@ public class ReaderTest {
 
 	@Test
 	public void retrieves_the_bio_via_the_last_fm_api() throws IOException {
-		prepareExpectations("getInfo");
+		prepareExpectations("getinfo");
 		String bio = reader.getBio("Metallica");
 
 		verify(restReader).getAnswer(request);
@@ -41,7 +41,7 @@ public class ReaderTest {
 
 	@Test
 	public void retrieves_the_similar_artists_from_the_last_fm_api() throws IOException {
-		prepareExpectations("getSimilar");
+		prepareExpectations("getsimilar");
 		List<String> similarArtists = reader.getSimilarArtists("Metallica");
 
 		verify(restReader).getAnswer(request);

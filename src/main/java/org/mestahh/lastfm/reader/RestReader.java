@@ -24,7 +24,7 @@ public class RestReader {
 
 	private String readLines(BufferedReader in) throws IOException {
 		String inputLine;
-		String answer = null;
+		String answer = "";
 		while ((inputLine = in.readLine()) != null) {
 			answer += inputLine;
 		}

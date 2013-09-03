@@ -14,13 +14,13 @@ public class Reader {
 	}
 
 	public String getBio(String artist) throws IOException {
-		String answer = restReader.getAnswer("method=artist.getInfo&api_key=" + restReader.getApiKey() + "&artist="
+		String answer = restReader.getAnswer("method=artist.getinfo&api_key=" + restReader.getApiKey() + "&artist="
 				+ artist);
 		return mapper.retrieveBio(answer);
 	}
 
 	public List<String> getSimilarArtists(String artist) throws IOException {
-		String answer = restReader.getAnswer("method=artist.getSimilar&api_key=" + restReader.getApiKey() + "&artist="
+		String answer = restReader.getAnswer("method=artist.getsimilar&api_key=" + restReader.getApiKey() + "&artist="
 				+ artist);
 		return mapper.retrieveSimilarArtists(answer);
 
