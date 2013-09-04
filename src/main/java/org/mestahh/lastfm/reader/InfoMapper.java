@@ -20,8 +20,13 @@ public class InfoMapper {
 		builder = new SAXBuilder();
 	}
 
-	public String retrieveBio(String answer) {
-		return null;
+	public String retrieveBio(String answer) throws JDOMException, IOException {
+		Document info = builder.build(new StringReader(answer));
+		Iterator<Element> content = getDecendantElements(info, "content");
+		while (content.hasNext()) {
+			return content.next().getText();
+		}
+		return "";
 	}
 
 	public List<String> retrieveSimilarArtists(String answer) throws JDOMException, IOException {

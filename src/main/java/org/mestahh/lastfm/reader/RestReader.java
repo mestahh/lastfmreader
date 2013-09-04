@@ -37,7 +37,7 @@ public class RestReader {
 	}
 
 	protected URL createURL(String request) throws MalformedURLException {
-		return new URL("http://ws.audioscrobbler.com/2.0/?" + request);
+		return new URL("http://ws.audioscrobbler.com/2.0/?method=" + request + "&api_key=" + getApiKey());
 	}
 
 	public String getApiKey() {

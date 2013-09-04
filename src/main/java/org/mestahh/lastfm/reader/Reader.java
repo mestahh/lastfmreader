@@ -11,15 +11,15 @@ public class Reader {
 
 	private final RestReader restReader;
 	private final InfoMapper mapper;
-	private final Map<String, String> bios = new Hashtable<String, String>();
-	private final Map<String, List<String>> similarArtists = new Hashtable<String, List<String>>();
+	private static final Map<String, String> bios = new Hashtable<String, String>();
+	private static final Map<String, List<String>> similarArtists = new Hashtable<String, List<String>>();
 
 	public Reader(RestReader restReader, InfoMapper mapper) {
 		this.restReader = restReader;
 		this.mapper = mapper;
 	}
 
-	public String getBio(String artist) throws IOException {
+	public String getBio(String artist) throws IOException, JDOMException {
 		String bio = bios.get(artist);
 		if (bio == null) {
 			String answer = restReader.getAnswer("method=artist.getinfo&api_key=" + restReader.getApiKey() + "&artist="
@@ -28,7 +28,11 @@ public class Reader {
 			bios.put(artist, bio);
 		}
 		return bio;
+	}
 
+	public static void cleanCaches() {
+		bios.clear();
+		similarArtists.clear();
 	}
 
 	public List<String> getSimilarArtists(String artist) throws IOException, JDOMException {
