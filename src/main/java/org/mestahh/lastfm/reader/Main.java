@@ -30,7 +30,7 @@ public class Main {
 		}
 	}
 
-	private static LastFmReader createReader(CommandLine cmd) {
+	protected static LastFmReader createReader(CommandLine cmd) {
 		RestRequestExecutor restReader = new RestRequestExecutor(getApiKey(cmd));
 		ResponseMapper mapper = new ResponseMapper();
 		LastFmReader reader = new LastFmReader(restReader, mapper);
@@ -64,7 +64,7 @@ public class Main {
 		return cmd.getOptionValue("k");
 	}
 
-	private static boolean optionsAreNotDefined(CommandLine cmd) {
+	protected static boolean optionsAreNotDefined(CommandLine cmd) {
 		return getApiKey(cmd) == null || getArtist(cmd) == null || getMethod(cmd) == null;
 	}
 

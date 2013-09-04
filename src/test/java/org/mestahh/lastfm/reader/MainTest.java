@@ -1,6 +1,9 @@
 package org.mestahh.lastfm.reader;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
@@ -15,6 +18,41 @@ public class MainTest {
 		CommandLine cmd = Main.createCommandLineWithOptions(args);
 
 		assertEquals(0, cmd.getOptions().length);
+	}
+
+	@Test
+	public void creates_a_new_instance_of_the_LastFmReader_class() throws ParseException {
+		String[] args = { "-m", "bio", "-a", "artist", "-k", "key" };
+		CommandLine cmd = Main.createCommandLineWithOptions(args);
+		LastFmReader reader = Main.createReader(cmd);
+		assertNotNull(reader);
+	}
+
+	@Test
+	public void returns_false_if_all_options_are_defined() throws ParseException {
+		String[] args = { "-m", "bio", "-a", "artist", "-k", "key" };
+		CommandLine cmd = Main.createCommandLineWithOptions(args);
+		assertFalse(Main.optionsAreNotDefined(cmd));
+	}
+
+	@Test
+	public void returns_true_if_the_method_option_is_missing() throws ParseException {
+		assertOptionExistence("-a", "artist", "-k", "key");
+	}
+
+	@Test
+	public void returns_true_if_the_artist_option_is_missing() throws ParseException {
+		assertOptionExistence("-m", "bio", "-k", "key");
+	}
+
+	@Test
+	public void returns_true_if_the_api_key_option_is_missing() throws ParseException {
+		assertOptionExistence("-m", "bio", "-a", "artist");
+	}
+
+	private void assertOptionExistence(String... args2) throws ParseException {
+		CommandLine cmd = Main.createCommandLineWithOptions(args2);
+		assertTrue(Main.optionsAreNotDefined(cmd));
 	}
 
 	@Test
