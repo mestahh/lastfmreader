@@ -13,29 +13,43 @@ import org.jdom.JDOMException;
 public class Main {
 
 	public static void main(String[] args) throws IOException, JDOMException, ParseException {
-		Options options = new Options();
-		options.addOption("m", true, "method name[bio|similar]");
-		options.addOption("a", true, "artist name");
-		options.addOption("k", true, "api_key");
-
-		CommandLineParser parser = new BasicParser();
-		CommandLine cmd = parser.parse(options, args);
+		CommandLine cmd = createCommandLineWithOptions(args);
 
 		if (optionsAreNotDefined(cmd)) {
 			usage();
 			return;
 		}
 		//my key : "37be6c106e0df038465a880c7b65b15b"
-		RestReader restReader = new RestReader(getApiKey(cmd));
-		InfoMapper mapper = new InfoMapper();
-		Reader reader = new Reader(restReader, mapper);
+		LastFmReader reader = createReader(cmd);
 
 		if (getMethod(cmd).equals("bio")) {
-			System.out.println(reader.getBio(getArtist(cmd)));
+			print(reader.getBio(getArtist(cmd)));
 		}
 		if (getMethod(cmd).equals("similar")) {
-			print(reader.getSimilarArtists(getArtist(cmd)));
+			printList(reader.getSimilarArtists(getArtist(cmd)));
 		}
+	}
+
+	private static LastFmReader createReader(CommandLine cmd) {
+		RestRequestExecutor restReader = new RestRequestExecutor(getApiKey(cmd));
+		ResponseMapper mapper = new ResponseMapper();
+		LastFmReader reader = new LastFmReader(restReader, mapper);
+		return reader;
+	}
+
+	protected static CommandLine createCommandLineWithOptions(String[] args) throws ParseException {
+		Options options = new Options();
+		options.addOption("m", true, "method name[bio|similar]");
+		options.addOption("a", true, "artist name");
+		options.addOption("k", true, "api key");
+
+		CommandLineParser parser = new BasicParser();
+		CommandLine cmd = parser.parse(options, args);
+		return cmd;
+	}
+
+	private static void print(String string) {
+		System.out.println(string);
 	}
 
 	private static String getMethod(CommandLine cmd) {
@@ -55,12 +69,12 @@ public class Main {
 	}
 
 	private static void usage() {
-		System.out.println("Usage: java -jar lastfmreader.jar -k <api_key> -m <method name> -a <artist name>");
+		print("Usage: java -jar lastfmreader.jar -k <api_key> -m <method name> -a <artist name>");
 	}
 
-	private static void print(List<String> similarArtists) {
+	private static void printList(List<String> similarArtists) {
 		for (String artist : similarArtists) {
-			System.out.println(artist);
+			print(artist);
 		}
 	}
 

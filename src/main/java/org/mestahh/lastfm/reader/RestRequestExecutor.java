@@ -7,22 +7,22 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class RestReader {
+public class RestRequestExecutor {
 
 	private final String apiKey;
 
-	public RestReader(String apiKey) {
+	public RestRequestExecutor(String apiKey) {
 		this.apiKey = apiKey;
 	}
 
-	public String getAnswer(String request) throws IOException {
-		URL oracle = createURL(request);
-		URLConnection connection = oracle.openConnection();
+	public String sendRequest(String request) throws IOException {
+		URL lastFmApi = createURL(request);
+		URLConnection connection = lastFmApi.openConnection();
 		BufferedReader input = craeteBufferedReader(connection);
 		return readLines(input);
 	}
 
-	private String readLines(BufferedReader in) throws IOException {
+	protected String readLines(BufferedReader in) throws IOException {
 		String inputLine;
 		String answer = "";
 		while ((inputLine = in.readLine()) != null) {

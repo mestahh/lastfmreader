@@ -11,13 +11,13 @@ import org.jdom.JDOMException;
 import org.junit.Before;
 import org.junit.Test;
 
-public class InfoMapperTest {
+public class ResponseMapperTest {
 
-	private InfoMapper testObj;
+	private ResponseMapper testObj;
 
 	@Before
 	public void setUp() {
-		testObj = new InfoMapper();
+		testObj = new ResponseMapper();
 	}
 
 	@Test
@@ -55,6 +55,7 @@ public class InfoMapperTest {
 		while ((currentLine = br.readLine()) != null) {
 			content += currentLine;
 		}
+		br.close();
 		return content;
 	}
 

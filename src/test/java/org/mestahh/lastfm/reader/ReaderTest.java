@@ -21,17 +21,17 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ReaderTest {
 
 	@Mock
-	private RestReader restReader;
+	private RestRequestExecutor restReader;
 	@Mock
-	private InfoMapper mapper;
+	private ResponseMapper mapper;
 	private final String apiKey = "apiKey";
 	private String answer;
 	private String request;
-	private Reader testObj;
+	private LastFmReader testObj;
 
 	@Before
 	public void setUp() {
-		testObj = new Reader(restReader, mapper);
+		testObj = new LastFmReader(restReader, mapper);
 		answer = "answer";
 	}
 
@@ -42,7 +42,7 @@ public class ReaderTest {
 		String bio = testObj.getBio("Metallica");
 
 		assertEquals("bio", bio);
-		verify(restReader).getAnswer(request);
+		verify(restReader).sendRequest(request);
 		verify(mapper).retrieveBio(answer);
 	}
 
@@ -51,7 +51,7 @@ public class ReaderTest {
 		prepareExpectations("getsimilar", answer);
 		testObj.getSimilarArtists("Metallica");
 
-		verify(restReader).getAnswer(request);
+		verify(restReader).sendRequest(request);
 		verify(mapper).retrieveSimilarArtists(answer);
 	}
 
@@ -61,11 +61,11 @@ public class ReaderTest {
 
 		when(mapper.retrieveBio("cachedAnswer")).thenReturn("cachedBio");
 		testObj.getBio("Metallica");
-		Reader testObj2 = new Reader(restReader, mapper);
+		LastFmReader testObj2 = new LastFmReader(restReader, mapper);
 		String cachedResult = testObj2.getBio("Metallica");
 
 		assertEquals("cachedBio", cachedResult);
-		verify(restReader, times(1)).getAnswer(request);
+		verify(restReader, times(1)).sendRequest(request);
 	}
 
 	@Test
@@ -75,23 +75,23 @@ public class ReaderTest {
 		when(mapper.retrieveSimilarArtists("cachedAnswer")).thenReturn(Arrays.asList("Pantera"));
 
 		testObj.getSimilarArtists("Metallica");
-		Reader testObj2 = new Reader(restReader, mapper);
+		LastFmReader testObj2 = new LastFmReader(restReader, mapper);
 		List<String> similarArtists = testObj2.getSimilarArtists("Metallica");
 
 		assertEquals(Arrays.asList("Pantera"), similarArtists);
-		verify(restReader, times(1)).getAnswer(request);
+		verify(restReader, times(1)).sendRequest(request);
 	}
 
 	private void prepareExpectations(String method, String expectedAnswer) throws IOException {
 		request = "method=artist." + method + "&api_key=" + apiKey + "&artist=Metallica";
 
 		when(restReader.getApiKey()).thenReturn(apiKey);
-		when(restReader.getAnswer(request)).thenReturn(expectedAnswer);
+		when(restReader.sendRequest(request)).thenReturn(expectedAnswer);
 	}
 
 	@After
 	public void tearDown() {
-		Reader.cleanCaches();
+		LastFmReader.cleanCaches();
 	}
 
 }

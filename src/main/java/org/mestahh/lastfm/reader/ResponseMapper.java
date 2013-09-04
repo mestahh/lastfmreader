@@ -12,15 +12,16 @@ import org.jdom.JDOMException;
 import org.jdom.filter.ElementFilter;
 import org.jdom.input.SAXBuilder;
 
-public class InfoMapper {
+public class ResponseMapper {
 
 	private final SAXBuilder builder;
 
-	public InfoMapper() {
+	public ResponseMapper() {
 		builder = new SAXBuilder();
 	}
 
 	public String retrieveBio(String answer) throws JDOMException, IOException {
+
 		Document info = builder.build(new StringReader(answer));
 		Iterator<Element> content = getDecendantElements(info, "summary");
 		while (content.hasNext()) {
@@ -41,8 +42,9 @@ public class InfoMapper {
 		return artists;
 	}
 
-	private Iterator<Element> getDecendantElements(Document artistsDoc, String tagName) {
-		return artistsDoc.getRootElement().getDescendants(new ElementFilter(tagName));
+	private Iterator<Element> getDecendantElements(Document response, String tagName) {
+		ElementFilter elementFilter = new ElementFilter(tagName);
+		return response.getRootElement().getDescendants(elementFilter);
 	}
 
 }
