@@ -21,9 +21,8 @@ Usage: java -jar lastfmreader.jar -k <api_key> -m <method name> -a <artist name>
 
 Two API methods can be called: 
 
-  * [I'm an inline-style link](https://www.google.com)
-  * artist.getinfo with the -m bio option
-  * artist.getsimilar with the -m similar option
+  * [artist.getinfo](http://www.lastfm.de/api/show/artist.getInfo) with the -m bio option
+  * [artist.getsimilar](http://www.lastfm.de/api/show/artist.getSimilar) with the -m similar option
 
 There is a test API key: 37be6c106e0df038465a880c7b65b15b
 
@@ -33,9 +32,9 @@ Module usage
 Here's a sample code from the Main class:
 
 ```java
-RestRequestExecutor restReader = new RestRequestExecutor(apiKey);
+RestRequestExecutor restExecutor = new RestRequestExecutor(apiKey);
 ResponseMapper mapper = new ResponseMapper();
-LastFmReader reader = new LastFmReader(restReader, mapper);
+LastFmReader reader = new LastFmReader(restExecutor, mapper);
 ```
 
 Then you can use your reader instance to retrieve information.
