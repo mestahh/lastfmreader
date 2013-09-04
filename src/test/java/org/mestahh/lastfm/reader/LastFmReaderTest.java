@@ -18,10 +18,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ReaderTest {
+public class LastFmReaderTest {
 
 	@Mock
-	private RestRequestExecutor restReader;
+	private RestRequestExecutor restRequestExecutor;
 	@Mock
 	private ResponseMapper mapper;
 	private final String apiKey = "apiKey";
@@ -31,7 +31,7 @@ public class ReaderTest {
 
 	@Before
 	public void setUp() {
-		testObj = new LastFmReader(restReader, mapper);
+		testObj = new LastFmReader(restRequestExecutor, mapper);
 		answer = "answer";
 	}
 
@@ -42,7 +42,7 @@ public class ReaderTest {
 		String bio = testObj.getBio("Metallica");
 
 		assertEquals("bio", bio);
-		verify(restReader).sendRequest(request);
+		verify(restRequestExecutor).sendRequest(request);
 		verify(mapper).retrieveBio(answer);
 	}
 
@@ -51,7 +51,7 @@ public class ReaderTest {
 		prepareExpectations("getsimilar", answer);
 		testObj.getSimilarArtists("Metallica");
 
-		verify(restReader).sendRequest(request);
+		verify(restRequestExecutor).sendRequest(request);
 		verify(mapper).retrieveSimilarArtists(answer);
 	}
 
@@ -61,11 +61,11 @@ public class ReaderTest {
 
 		when(mapper.retrieveBio("cachedAnswer")).thenReturn("cachedBio");
 		testObj.getBio("Metallica");
-		LastFmReader testObj2 = new LastFmReader(restReader, mapper);
+		LastFmReader testObj2 = new LastFmReader(restRequestExecutor, mapper);
 		String cachedResult = testObj2.getBio("Metallica");
 
 		assertEquals("cachedBio", cachedResult);
-		verify(restReader, times(1)).sendRequest(request);
+		verify(restRequestExecutor, times(1)).sendRequest(request);
 	}
 
 	@Test
@@ -75,18 +75,18 @@ public class ReaderTest {
 		when(mapper.retrieveSimilarArtists("cachedAnswer")).thenReturn(Arrays.asList("Pantera"));
 
 		testObj.getSimilarArtists("Metallica");
-		LastFmReader testObj2 = new LastFmReader(restReader, mapper);
+		LastFmReader testObj2 = new LastFmReader(restRequestExecutor, mapper);
 		List<String> similarArtists = testObj2.getSimilarArtists("Metallica");
 
 		assertEquals(Arrays.asList("Pantera"), similarArtists);
-		verify(restReader, times(1)).sendRequest(request);
+		verify(restRequestExecutor, times(1)).sendRequest(request);
 	}
 
 	private void prepareExpectations(String method, String expectedAnswer) throws IOException {
-		request = "method=artist." + method + "&api_key=" + apiKey + "&artist=Metallica";
+		request = "artist." + method + "&artist=Metallica";
 
-		when(restReader.getApiKey()).thenReturn(apiKey);
-		when(restReader.sendRequest(request)).thenReturn(expectedAnswer);
+		when(restRequestExecutor.getApiKey()).thenReturn(apiKey);
+		when(restRequestExecutor.sendRequest(request)).thenReturn(expectedAnswer);
 	}
 
 	@After
