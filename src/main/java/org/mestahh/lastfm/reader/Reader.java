@@ -19,7 +19,7 @@ public class Reader {
 		this.mapper = mapper;
 	}
 
-	public String getBio(String artist) throws IOException, JDOMException {
+	public synchronized String getBio(String artist) throws IOException, JDOMException {
 		String bio = bios.get(artist);
 		if (bio == null) {
 			String answer = restReader.getAnswer("method=artist.getinfo&api_key=" + restReader.getApiKey() + "&artist="
@@ -30,12 +30,7 @@ public class Reader {
 		return bio;
 	}
 
-	public static void cleanCaches() {
-		bios.clear();
-		similarArtists.clear();
-	}
-
-	public List<String> getSimilarArtists(String artist) throws IOException, JDOMException {
+	public synchronized List<String> getSimilarArtists(String artist) throws IOException, JDOMException {
 		List<String> similar = similarArtists.get(artist);
 		if (similar == null) {
 			String answer = restReader.getAnswer("method=artist.getsimilar&api_key=" + restReader.getApiKey()
@@ -46,4 +41,10 @@ public class Reader {
 		return similar;
 
 	}
+
+	public static void cleanCaches() {
+		bios.clear();
+		similarArtists.clear();
+	}
+
 }
