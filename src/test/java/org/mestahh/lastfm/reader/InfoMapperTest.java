@@ -23,7 +23,7 @@ public class InfoMapperTest {
 	@Test
 	public void returns_an_empty_string_if_there_is_no_content_in_the_bio_section_in_the_xml() throws JDOMException,
 			IOException {
-		String info = readFile("artist_info_without_content.xml");
+		String info = readFile("artist_info_without_summary.xml");
 		String bio = testObj.retrieveBio(info);
 		assertEquals("", bio);
 	}
@@ -32,7 +32,7 @@ public class InfoMapperTest {
 	public void creates_a_string_from_the_bio_from_the_xml() throws IOException, JDOMException {
 		String info = readFile("artist_info.xml");
 		String bio = testObj.retrieveBio(info);
-		assertEquals("bio info about the artist", bio);
+		assertEquals("bio summary", bio);
 	}
 
 	@Test

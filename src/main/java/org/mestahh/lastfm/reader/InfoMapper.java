@@ -22,7 +22,7 @@ public class InfoMapper {
 
 	public String retrieveBio(String answer) throws JDOMException, IOException {
 		Document info = builder.build(new StringReader(answer));
-		Iterator<Element> content = getDecendantElements(info, "content");
+		Iterator<Element> content = getDecendantElements(info, "summary");
 		while (content.hasNext()) {
 			return content.next().getText();
 		}
