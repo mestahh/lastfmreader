@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jdom.JDOMException;
+import org.mestahh.lastfm.reader.constants.ImplementedMethods;
 
 public class LastFmReader {
 
@@ -22,28 +23,31 @@ public class LastFmReader {
 	public synchronized String getBio(String artist) throws IOException, JDOMException {
 		String bio = bios.get(artist);
 		if (bioWasNotCached(bio)) {
-			String answer = restExecutor.sendRequest("method=artist.getinfo&api_key=" + restExecutor.getApiKey() + "&artist="
-					+ artist);
-			bio = mapper.retrieveBio(answer);
+			String response = sendRequest(artist, ImplementedMethods.BIO.getApiMethod());
+			bio = mapper.retrieveBio(response);
 			bios.put(artist, bio);
 		}
 		return bio;
 	}
 
-	private boolean bioWasNotCached(String bio) {
-		return bio == null;
-	}
-
 	public synchronized List<String> getSimilarArtists(String artist) throws IOException, JDOMException {
 		List<String> similar = similarArtists.get(artist);
 		if (similiarArtistsWereNotCached(similar)) {
-			String answer = restExecutor.sendRequest("method=artist.getsimilar&api_key=" + restExecutor.getApiKey()
-					+ "&artist=" + artist);
-			similar = mapper.retrieveSimilarArtists(answer);
+			String response = sendRequest(artist, ImplementedMethods.SIMILAR.getApiMethod());
+			similar = mapper.retrieveSimilarArtists(response);
 			similarArtists.put(artist, similar);
 		}
 		return similar;
 
+	}
+
+	private String sendRequest(String artist, String apiMethod) throws IOException {
+		return restExecutor.sendRequest("method=" + apiMethod + "&api_key=" + restExecutor.getApiKey() + "&artist="
+				+ artist);
+	}
+
+	private boolean bioWasNotCached(String bio) {
+		return bio == null;
 	}
 
 	private boolean similiarArtistsWereNotCached(List<String> similar) {

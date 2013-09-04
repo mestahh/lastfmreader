@@ -9,6 +9,7 @@ import java.net.URLConnection;
 
 public class RestRequestExecutor {
 
+	private static final String LAST_FM_API_URI = "http://ws.audioscrobbler.com/2.0/";
 	private final String apiKey;
 
 	public RestRequestExecutor(String apiKey) {
@@ -41,7 +42,7 @@ public class RestRequestExecutor {
 	}
 
 	protected URL createURL(String request) throws MalformedURLException {
-		return new URL("http://ws.audioscrobbler.com/2.0/?method=" + request + "&api_key=" + getApiKey());
+		return new URL(LAST_FM_API_URI + "?method=" + request + "&api_key=" + getApiKey());
 	}
 
 	public String getApiKey() {

@@ -6,17 +6,16 @@ import java.util.List;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.ParseException;
 import org.jdom.JDOMException;
+import org.mestahh.lastfm.reader.constants.ImplementedMethods;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException, JDOMException, ParseException {
-
 		Main main = new Main();
 		main.run(args);
-
 	}
 
-	private void run(String[] args) throws ParseException, IOException, JDOMException {
+	protected void run(String[] args) throws ParseException, IOException, JDOMException {
 		CliHandler cliHandler = new CliHandler();
 		CommandLine cmd = cliHandler.createCommandLineWithOptions(args);
 
@@ -27,10 +26,10 @@ public class Main {
 		String apiKey = cliHandler.getApiKey(cmd);
 		LastFmReader reader = createReader(apiKey);
 
-		if (cliHandler.getMethod(cmd).equals("bio")) {
+		if (cliHandler.getMethod(cmd).equals(ImplementedMethods.BIO.getParamName())) {
 			print(reader.getBio(cliHandler.getArtist(cmd)));
 		}
-		if (cliHandler.getMethod(cmd).equals("similar")) {
+		if (cliHandler.getMethod(cmd).equals(ImplementedMethods.SIMILAR.getParamName())) {
 			printList(reader.getSimilarArtists(cliHandler.getArtist(cmd)));
 		}
 
@@ -43,7 +42,7 @@ public class Main {
 		return reader;
 	}
 
-	private void print(String string) {
+	protected void print(String string) {
 		System.out.println(string);
 	}
 
