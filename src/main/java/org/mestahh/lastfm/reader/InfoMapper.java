@@ -14,21 +14,30 @@ import org.jdom.input.SAXBuilder;
 
 public class InfoMapper {
 
+	private final SAXBuilder builder;
+
+	public InfoMapper() {
+		builder = new SAXBuilder();
+	}
+
 	public String retrieveBio(String answer) {
 		return null;
 	}
 
 	public List<String> retrieveSimilarArtists(String answer) throws JDOMException, IOException {
-		SAXBuilder builder = new SAXBuilder();
-		List<String> artists = new ArrayList<String>();
 		Document artistsDoc = builder.build(new StringReader(answer));
-		Iterator<Element> artistsElements = artistsDoc.getRootElement().getDescendants(new ElementFilter("artist"));
-		
-		while(artistsElements.hasNext()) {
+		Iterator<Element> artistsElements = getDecendantElements(artistsDoc, "artist");
+
+		List<String> artists = new ArrayList<String>();
+		while (artistsElements.hasNext()) {
 			String name = artistsElements.next().getChildText("name");
 			artists.add(name);
 		}
 		return artists;
+	}
+
+	private Iterator<Element> getDecendantElements(Document artistsDoc, String tagName) {
+		return artistsDoc.getRootElement().getDescendants(new ElementFilter(tagName));
 	}
 
 }

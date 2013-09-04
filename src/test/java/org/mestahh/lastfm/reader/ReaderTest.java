@@ -1,9 +1,12 @@
 package org.mestahh.lastfm.reader;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jdom.JDOMException;
@@ -33,27 +36,55 @@ public class ReaderTest {
 
 	@Test
 	public void retrieves_the_bio_via_the_last_fm_api() throws IOException {
-		prepareExpectations("getinfo");
+		prepareExpectations("getinfo", answer);
+		when(mapper.retrieveBio(answer)).thenReturn("bio");
 		String bio = reader.getBio("Metallica");
 
+		assertEquals("bio", bio);
 		verify(restReader).getAnswer(request);
 		verify(mapper).retrieveBio(answer);
 	}
 
 	@Test
 	public void retrieves_the_similar_artists_from_the_last_fm_api() throws IOException, JDOMException {
-		prepareExpectations("getsimilar");
+		prepareExpectations("getsimilar", answer);
 		List<String> similarArtists = reader.getSimilarArtists("Metallica");
 
 		verify(restReader).getAnswer(request);
 		verify(mapper).retrieveSimilarArtists(answer);
 	}
 
-	private void prepareExpectations(String method) throws IOException {
+	@Test
+	public void returns_bio_if_it_was_cached_before() throws IOException {
+		prepareExpectations("getinfo", "cachedAnswer");
+
+		when(mapper.retrieveBio("cachedAnswer")).thenReturn("cachedBio");
+		reader.getBio("Metallica");
+
+		String cachedResult = reader.getBio("Metallica");
+
+		assertEquals("cachedBio", cachedResult);
+		verify(restReader, times(1)).getAnswer(request);
+	}
+
+	@Test
+	public void returns_similar_artists_if_it_was_cached_before() throws IOException, JDOMException {
+		prepareExpectations("getsimilar", "cachedAnswer");
+
+		when(mapper.retrieveSimilarArtists("cachedAnswer")).thenReturn(Arrays.asList("Pantera"));
+
+		reader.getSimilarArtists("Metallica");
+		List<String> similarArtists = reader.getSimilarArtists("Metallica");
+
+		assertEquals(Arrays.asList("Pantera"), similarArtists);
+		verify(restReader, times(1)).getAnswer(request);
+	}
+
+	private void prepareExpectations(String method, String expectedAnswer) throws IOException {
 		request = "method=artist." + method + "&api_key=" + apiKey + "&artist=Metallica";
 
 		when(restReader.getApiKey()).thenReturn(apiKey);
-		when(restReader.getAnswer(request)).thenReturn(answer);
+		when(restReader.getAnswer(request)).thenReturn(expectedAnswer);
 	}
 
 }
