@@ -16,7 +16,6 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -55,20 +54,6 @@ public class RestRequestExecutorTest {
 		when(connection.getInputStream()).thenReturn(inputStream);
 		BufferedReader buffReader = testObj.craeteBufferedReader(connection);
 		assertNotNull(buffReader);
-	}
-
-	@Ignore
-	@Test
-	public void returns_artist_info() throws IOException {
-		String answer = testObj.sendRequest("artist.getinfo&artist=Cher");
-		System.out.println(answer);
-	}
-
-	@Ignore
-	@Test
-	public void returns_similar_artists() throws IOException {
-		String answer = testObj.sendRequest("artist.getsimilar&artist=cher");
-		System.out.println(answer);
 	}
 
 	@Test

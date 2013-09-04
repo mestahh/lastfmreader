@@ -17,9 +17,13 @@ public class RestRequestExecutor {
 
 	public String sendRequest(String request) throws IOException {
 		URL lastFmApi = createURL(request);
-		URLConnection connection = lastFmApi.openConnection();
+		URLConnection connection = openConnection(lastFmApi);
 		BufferedReader input = craeteBufferedReader(connection);
 		return readLines(input);
+	}
+
+	protected URLConnection openConnection(URL lastFmApi) throws IOException {
+		return lastFmApi.openConnection();
 	}
 
 	protected String readLines(BufferedReader in) throws IOException {

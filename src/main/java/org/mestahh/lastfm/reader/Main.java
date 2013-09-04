@@ -10,6 +10,13 @@ import org.jdom.JDOMException;
 public class Main {
 
 	public static void main(String[] args) throws IOException, JDOMException, ParseException {
+
+		Main main = new Main();
+		main.run(args);
+
+	}
+
+	private void run(String[] args) throws ParseException, IOException, JDOMException {
 		CliHandler cliHandler = new CliHandler();
 		CommandLine cmd = cliHandler.createCommandLineWithOptions(args);
 
@@ -18,7 +25,6 @@ public class Main {
 			return;
 		}
 		String apiKey = cliHandler.getApiKey(cmd);
-		//my key : "37be6c106e0df038465a880c7b65b15b"
 		LastFmReader reader = createReader(apiKey);
 
 		if (cliHandler.getMethod(cmd).equals("bio")) {
@@ -27,24 +33,25 @@ public class Main {
 		if (cliHandler.getMethod(cmd).equals("similar")) {
 			printList(reader.getSimilarArtists(cliHandler.getArtist(cmd)));
 		}
+
 	}
 
-	protected static LastFmReader createReader(String apiKey) {
+	protected LastFmReader createReader(String apiKey) {
 		RestRequestExecutor restReader = new RestRequestExecutor(apiKey);
 		ResponseMapper mapper = new ResponseMapper();
 		LastFmReader reader = new LastFmReader(restReader, mapper);
 		return reader;
 	}
 
-	private static void print(String string) {
+	private void print(String string) {
 		System.out.println(string);
 	}
 
-	private static void usage() {
+	private void usage() {
 		print("Usage: java -jar lastfmreader.jar -k <api_key> -m <method name> -a <artist name>");
 	}
 
-	private static void printList(List<String> similarArtists) {
+	private void printList(List<String> similarArtists) {
 		for (String artist : similarArtists) {
 			print(artist);
 		}
