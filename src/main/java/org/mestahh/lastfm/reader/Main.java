@@ -20,7 +20,7 @@ public class Main {
 		CommandLine cmd = cliHandler.createCommandLineWithOptions(args);
 
 		if (cliHandler.optionsAreNotDefined(cmd)) {
-			usage();
+			usage(cliHandler);
 			return;
 		}
 		String apiKey = cliHandler.getApiKey(cmd);
@@ -46,8 +46,8 @@ public class Main {
 		System.out.println(string);
 	}
 
-	private void usage() {
-		print("Usage: java -jar lastfmreader.jar -k <api_key> -m <method name> -a <artist name>");
+	private void usage(CliHandler cliHandler) {
+		print(cliHandler.getUsage());
 	}
 
 	private void printList(List<String> similarArtists) {

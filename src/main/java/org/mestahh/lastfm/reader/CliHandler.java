@@ -7,11 +7,15 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 public class CliHandler {
+	protected static final String API_KEY_OPTION = "k";
+	protected static final String ARTIST_OPTION = "a";
+	protected static final String METHOD_OPTION = "m";
+
 	protected CommandLine createCommandLineWithOptions(String[] args) throws ParseException {
 		Options options = new Options();
-		options.addOption("m", true, "method name[bio|similar]");
-		options.addOption("a", true, "artist name");
-		options.addOption("k", true, "api key");
+		options.addOption(METHOD_OPTION, true, "method name[bio|similar]");
+		options.addOption(ARTIST_OPTION, true, "artist name");
+		options.addOption(API_KEY_OPTION, true, "api key");
 
 		CommandLineParser parser = new BasicParser();
 		CommandLine cmd = parser.parse(options, args);
@@ -23,15 +27,19 @@ public class CliHandler {
 	}
 
 	protected String getApiKey(CommandLine cmd) {
-		return cmd.getOptionValue("k");
+		return cmd.getOptionValue(API_KEY_OPTION);
 	}
 
 	protected String getMethod(CommandLine cmd) {
-		return cmd.getOptionValue("m");
+		return cmd.getOptionValue(METHOD_OPTION);
 	}
 
 	protected String getArtist(CommandLine cmd) {
-		return cmd.getOptionValue("a");
+		return cmd.getOptionValue(ARTIST_OPTION);
 	}
 
+	public String getUsage() {
+		return "Usage: java -jar lastfmreader.jar -" + API_KEY_OPTION + " <api_key> -" + METHOD_OPTION
+				+ " <method name> -" + ARTIST_OPTION + " <artist name>";
+	}
 }
