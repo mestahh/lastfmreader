@@ -19,6 +19,12 @@ CLI usage
 Usage: java -jar lastfmreader.jar -k <api_key> -m <method name> -a <artist name>
 ```
 
+The artist's name can contain white spaces, of course. In this case put it between quotation marks.
+
+```
+java -jar lastfmreader.jar -k yoursecretkey -m bio -a "Black Label Society"
+```
+
 Two API methods can be called: 
 
   * [artist.getinfo](http://www.lastfm.de/api/show/artist.getInfo) with the -m bio option

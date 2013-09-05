@@ -18,6 +18,7 @@ public class RestRequestExecutor {
 
 	public String sendRequest(String request) throws IOException {
 		URL lastFmApi = createURL(request);
+		System.out.println(lastFmApi.getQuery());
 		URLConnection connection = openConnection(lastFmApi);
 		BufferedReader input = craeteBufferedReader(connection);
 		return readLines(input);

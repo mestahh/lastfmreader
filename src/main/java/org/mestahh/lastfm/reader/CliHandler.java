@@ -10,6 +10,7 @@ public class CliHandler {
 	protected static final String API_KEY_OPTION = "k";
 	protected static final String ARTIST_OPTION = "a";
 	protected static final String METHOD_OPTION = "m";
+	public static final String DELIMITER = "+";
 
 	protected CommandLine createCommandLineWithOptions(String[] args) throws ParseException {
 		Options options = new Options();
@@ -35,7 +36,11 @@ public class CliHandler {
 	}
 
 	protected String getArtist(CommandLine cmd) {
-		return cmd.getOptionValue(ARTIST_OPTION);
+		String optionValue = cmd.getOptionValue(ARTIST_OPTION);
+		if (optionValue == null) {
+			return null;
+		}
+		return optionValue.replaceAll(" ", DELIMITER);
 	}
 
 	public String getUsage() {
