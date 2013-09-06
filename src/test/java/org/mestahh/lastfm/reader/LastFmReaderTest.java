@@ -36,7 +36,7 @@ public class LastFmReaderTest {
 	}
 
 	@Test
-	public void retrieves_the_bio_via_the_last_fm_api() throws IOException, JDOMException {
+	public void retrieves_the_bio_via_the_last_fm_api() throws IOException, JDOMException, RequestErrorException {
 		prepareExpectations("getinfo", answer);
 		when(mapper.retrieveBio(answer)).thenReturn("bio");
 		String bio = testObj.getBio("Metallica");
@@ -47,7 +47,8 @@ public class LastFmReaderTest {
 	}
 
 	@Test
-	public void retrieves_the_similar_artists_from_the_last_fm_api() throws IOException, JDOMException {
+	public void retrieves_the_similar_artists_from_the_last_fm_api() throws IOException, JDOMException,
+			RequestErrorException {
 		prepareExpectations("getsimilar", answer);
 		testObj.getSimilarArtists("Metallica");
 
@@ -56,7 +57,7 @@ public class LastFmReaderTest {
 	}
 
 	@Test
-	public void returns_bio_if_it_was_cached_before() throws IOException, JDOMException {
+	public void returns_bio_if_it_was_cached_before() throws IOException, JDOMException, RequestErrorException {
 		prepareExpectations("getinfo", "cachedAnswer");
 
 		when(mapper.retrieveBio("cachedAnswer")).thenReturn("cachedBio");
@@ -69,7 +70,8 @@ public class LastFmReaderTest {
 	}
 
 	@Test
-	public void returns_similar_artists_if_it_was_cached_before() throws IOException, JDOMException {
+	public void returns_similar_artists_if_it_was_cached_before() throws IOException, JDOMException,
+			RequestErrorException {
 		prepareExpectations("getsimilar", "cachedAnswer");
 
 		when(mapper.retrieveSimilarArtists("cachedAnswer")).thenReturn(Arrays.asList("Pantera"));

@@ -20,7 +20,7 @@ public class LastFmReader {
 		this.mapper = mapper;
 	}
 
-	public synchronized String getBio(String artist) throws IOException, JDOMException {
+	public synchronized String getBio(String artist) throws IOException, JDOMException, RequestErrorException {
 		String bio = bios.get(artist);
 		if (bioWasNotCached(bio)) {
 			String response = sendRequest(artist, ImplementedMethods.BIO.getApiMethod());
@@ -30,7 +30,8 @@ public class LastFmReader {
 		return bio;
 	}
 
-	public synchronized List<String> getSimilarArtists(String artist) throws IOException, JDOMException {
+	public synchronized List<String> getSimilarArtists(String artist) throws IOException, JDOMException,
+			RequestErrorException {
 		List<String> similar = similarArtists.get(artist);
 		if (similiarArtistsWereNotCached(similar)) {
 			String response = sendRequest(artist, ImplementedMethods.SIMILAR.getApiMethod());

@@ -7,9 +7,9 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 public class CliHandler {
-	protected static final String API_KEY_OPTION = "k";
-	protected static final String ARTIST_OPTION = "a";
-	protected static final String METHOD_OPTION = "m";
+	public static final String API_KEY_OPTION = "k";
+	public static final String ARTIST_OPTION = "a";
+	public static final String METHOD_OPTION = "m";
 	public static final String DELIMITER = "+";
 
 	protected CommandLine createCommandLineWithOptions(String[] args) throws ParseException {

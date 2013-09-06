@@ -10,12 +10,20 @@ import org.mestahh.lastfm.reader.constants.ImplementedMethods;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException, JDOMException, ParseException {
+	public static void main(String[] args) {
 		Main main = new Main();
-		main.run(args);
+		try {
+			System.out.println("Trying to download the requested info...");
+			main.run(args);
+		} catch (RequestErrorException e) {
+			System.out.println("Error in request: " + e.getMessage() + ", errorCode: " + e.getErrorCode() + ".");
+		} catch (Exception e) {
+			System.out
+					.println("An error occured. Please check your query and your internet connection.\nA company proxy could be your enemy.\nContact me on : http://github.com/mestahh/lastfmreader");
+		}
 	}
 
-	protected void run(String[] args) throws ParseException, IOException, JDOMException {
+	protected void run(String[] args) throws ParseException, IOException, JDOMException, RequestErrorException {
 		CliHandler cliHandler = new CliHandler();
 		CommandLine cmd = cliHandler.createCommandLineWithOptions(args);
 

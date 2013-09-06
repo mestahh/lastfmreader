@@ -20,9 +20,10 @@ public class ResponseMapper {
 		builder = new SAXBuilder();
 	}
 
-	public String retrieveBio(String answer) throws JDOMException, IOException {
+	public String retrieveBio(String answer) throws JDOMException, IOException, RequestErrorException {
 
 		Document info = builder.build(new StringReader(answer));
+		throwExceptionIfTheResponseIsAnError(info);
 		Iterator<Element> content = getDecendantElements(info, "summary");
 		while (content.hasNext()) {
 			return content.next().getText();
@@ -30,8 +31,19 @@ public class ResponseMapper {
 		return "";
 	}
 
-	public List<String> retrieveSimilarArtists(String answer) throws JDOMException, IOException {
+	private void throwExceptionIfTheResponseIsAnError(Document info) throws RequestErrorException {
+		Element error = info.getRootElement().getChild("error");
+		if (error != null) {
+			String errorCode = error.getAttributeValue("code");
+			String errorText = error.getText();
+			throw new RequestErrorException(errorCode, errorText);
+		}
+
+	}
+
+	public List<String> retrieveSimilarArtists(String answer) throws JDOMException, IOException, RequestErrorException {
 		Document artistsDoc = builder.build(new StringReader(answer));
+		throwExceptionIfTheResponseIsAnError(artistsDoc);
 		Iterator<Element> artistsElements = getDecendantElements(artistsDoc, "artist");
 
 		List<String> artists = new ArrayList<String>();
